@@ -1,0 +1,64 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    margin: 0 !important;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+}
+
+body > span{
+    display: none !important;
+}
+#player{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+#stream_id{
+    position: absolute;
+    z-index: 2;
+    font-size: 100px;
+    left: 0px;
+    bottom: 0px;
+    color: #fff;
+    -webkit-text-fill-color: black;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: #fff;
+    opacity: .6;
+    width: 100%;
+}
+
+#rtmp_id{
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top:10px;
+    transform: translateX(-50%);
+    color: red;
+    opacity: .6;
+    display: none;
+}
+
+.video-js{
+    width: 100%;
+    height: 100%;
+}
+
+.vjs_video_3-dimensions{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.vjs-control-bar{
+    display: none !important;
+}

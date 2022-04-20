@@ -1,0 +1,166 @@
+@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono|Montserrat:700");
+
+body{
+    margin: 0 !important;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    background: black;
+}
+body > span{
+    display: none !important;
+}
+#player{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 9999999;
+}
+
+#stream_id{
+    position: absolute;
+    z-index: 2;
+    font-size: 100px;
+    left: 0px;
+    bottom: 0px;
+    color: #fff;
+    -webkit-text-fill-color: black;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: #fff;
+    opacity: .6;
+    width: 100%;
+}
+
+#rtmp_id{
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top:10px;
+    transform: translateX(-50%);
+    color: red;
+    opacity: .6;
+    display: none;
+}
+
+.video-js{
+    width: 100%;
+    height: 100%;
+}
+
+.vjs_video_3-dimensions{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.vjs-control-bar{
+    display: none !important;
+}
+
+
+.unauthorized * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    box-sizing: border-box;
+    color: inherit;
+}
+
+.unauthorized {
+    background-image: linear-gradient(120deg, #4f0088 0%, #000000 100%);
+    width: 100%;
+    height: 100vh;
+}
+
+.unauthorized h1 {
+    font-size: 45vw;
+    text-align: center;
+    position: fixed;
+    width: 100vw;
+    z-index: 1;
+    color: #ffffff26;
+    text-shadow: 0 0 50px rgba(0, 0, 0, 0.07);
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: "Montserrat", monospace;
+}
+
+.unauthorized div {
+    background: rgba(0, 0, 0, 0);
+    width: 70vw;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+    padding: 30px 30px 10px;
+    box-shadow: 0 0 150px -20px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+}
+
+.unauthorized P {
+    font-family: "Share Tech Mono", monospace;
+    color: #f5f5f5;
+    margin: 0 0 20px;
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.unauthorized span {
+    color: #f0c674;
+}
+
+.unauthorized i {
+    color: #8abeb7;
+}
+
+.unauthorized div a {
+    text-decoration: none;
+}
+
+.unauthorized b {
+    color: #81a2be;
+}
+
+.unauthorized a.avatar {
+    position: fixed;
+    bottom: 15px;
+    right: -100px;
+    animation: slide 0.5s 4.5s forwards;
+    display: block;
+    z-index: 4
+}
+
+.unauthorized a.avatar img {
+    border-radius: 100%;
+    width: 44px;
+    border: 2px solid white;
+}
+
+@keyframes slide {
+    from {
+        right: -100px;
+        transform: rotate(360deg);
+        opacity: 0;
+    }
+    to {
+        right: 15px;
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+}
+
+
+.xxxx {
+    height: 2.5px;
+    width: 2.5px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    top: 7%;
+    left: 2%;
+}

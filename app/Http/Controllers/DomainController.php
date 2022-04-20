@@ -71,12 +71,12 @@ class DomainController extends Controller
 
     public function iframeStreamList(Request $request)
     {
-        $referer = $request->domain;
+        $referer = $request->referer;
         $domain = Domain::select('id', 'thumbnail')->where('domain', $referer)->get();
         
-        $vtokenData = $this->encryptDecrypt($request->vtoken, 'decrypt');
-       
-        if(count($domain) > 0 && $this->space_empty($request->user_id) && $this->space_empty($request->site) && $vtokenData->original['status']) {
+        $vtokenData = $this->encryptDecrypt($request->voucher, 'decrypt');
+
+        if(count($domain) > 0 && $vtokenData->original['status']) {
             $iframeStreamLists[] = StreamDomain::select('stream.id', 'stream.name', 'stream.rtmp', 'stream.hash', 'stream.time', 'stream.status', 'stream_domain.id as stream_domain_id', 'stream_domain.status as stream_domain_status')
                                                     ->where('stream_domain.domain_id', $domain['0']->id)
                                                     ->where('stream_domain.status', 1)
@@ -100,23 +100,19 @@ class DomainController extends Controller
                 unset($iframeStreamLists[$i]->rtmp);
                 unset($iframeStreamLists[$i]->hash);
                 unset($iframeStreamLists[$i]->time);
+                unset($iframeStreamLists[$i]->id);
+                unset($iframeStreamLists[$i]->name);
+                unset($iframeStreamLists[$i]->status);
+                unset($iframeStreamLists[$i]->stream_domain_id);
+                unset($iframeStreamLists[$i]->stream_domain_status);
 
             }
-
-            $pusher = [
-                'id' => env('IFRAME_PUSHER_APP_ID'),
-                'key' => env('IFRAME_PUSHER_APP_KEY'),
-                'secret' => env('IFRAME_PUSHER_APP_SECRET'),
-                'cluster' => env('IFRAME_PUSHER_APP_CLUSTER'),
-                'tls' => env('IFRAME_PUSHER_USE_TLS')
-            ];
 
             $toggle_userdata = SitePreference::where('key', 'toggle_userdata')->first();
             return response()->json([
                 'data' => $iframeStreamLists,
                 'toggle_userdata' => $toggle_userdata ? $toggle_userdata->value : 0,
-                'user' => $vtokenData->original['data'],
-                'iframe_pusher' => $pusher,
+                'coupon' => $vtokenData->original['coupon'],
                 'status' => 1
             ]);
 
@@ -300,15 +296,7 @@ class DomainController extends Controller
 
         return $validate;
     }
-
-    private function space_empty($str)
-    {
-        if(empty($str) || ctype_space($str)) {
-            return null;
-        }
-        return $str;
-    }
-
+    
     public function encryptDecrypt($string, $action = 'encrypt')
     {
         $vtokenValidation = false;
@@ -340,7 +328,8 @@ class DomainController extends Controller
 
             return response()->json([
                 'data' => $data,
-                'status' =>$vtokenValidation
+                'coupon' => $reEncrypt,
+                'status' => $vtokenValidation
             ]);
         }
 
@@ -353,7 +342,7 @@ class DomainController extends Controller
     private function reEncrypt($string){
         $salt = openssl_random_pseudo_bytes(256);
         $iv = openssl_random_pseudo_bytes(16);
-        $passphrase = 'u7x!A%D*';
+        $passphrase = 'Pg25LJg5xG0Bqo74L0dXprowNxcmjmMZ';
         $iterations = 999;
         $key = hash_pbkdf2("sha512", $passphrase, $salt, $iterations, 64);
 
@@ -361,29 +350,5 @@ class DomainController extends Controller
 
         $data = array("ciphertext" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "salt" => bin2hex($salt));
         return json_encode($data);
-    }
-
-    private function get_host()
-    {
-        $url = url('/');
-        $enc_url = preg_replace_callback(
-            '%[^:/@?&=#]+%usD',
-            function ($matches) {
-                return urlencode($matches[0]);
-            },
-            $url
-        );
-
-        $parts = parse_url($enc_url);
-
-        if ($parts === false) {
-            throw new \InvalidArgumentException('Malformed URL: ' . $url);
-        }
-
-        foreach ($parts as $name => $value) {
-            $parts[$name] = urldecode($value);
-        }
-
-        return $parts['host'];
     }
 }
