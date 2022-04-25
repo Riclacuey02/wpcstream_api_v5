@@ -31,7 +31,7 @@ $(document).ready(function () {
         referer: referer.protocol + '//' + referer.hostname
       };
       $.ajax({
-        url: "http://lumenapiv5.ara/api/" + 'domain/iframe-stream-list',
+        url: "https://ara-sss.net/api/" + 'domain/iframe-stream-list',
         type: 'POST',
         headers: {
           'Content-Type': 'application/json'
