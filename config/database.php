@@ -82,14 +82,29 @@ return [
         'mongodb' => [ 
             'driver' => 'mongodb',
             'dsn' => env('DB_MD_DSN', 'localhost'),
-            // 'host' => env('DB_MD_HOST', 'localhost'),
-            // 'port' => env('DB_MD_PORT', 27017),
+            'host' => env('DB_MD_HOST', 'localhost'),
+            'port' => env('DB_MD_PORT', 27017),
             'database' => env('DB_MD_DATABASE'),
-            // 'username' => env('DB_MD_USERNAME'),
-            // 'password' => env('DB_MD_PASSWORD'),
+            'username' => env('DB_MD_USERNAME'),
+            'password' => env('DB_MD_PASSWORD'),
             'options' => [
-                'database' => 'admin' // sets the authentication database required by mongo 3
+                'tls' => true,
+                'tlsCAFile' => '/var/.ssh/rds-combined-ca-bundle.pem'
             ]
+            // 'options' => [
+            //     'ssl' => true,
+            // ],
+            // 'driver_options' => [
+            //     'context' => [
+            //         'ssl' => [
+            //             'cafile' => '/home/ubuntu/.ssh/rds-combined-ca-bundle.pem',
+            //             'allow_self_signed' => true,
+            //             'verify_peer' => true,
+            //             'verify_peer_name' => true,
+            //             'verify_expiry' => true,
+            //         ]
+            //     ]
+            // ]
         ],
 
         'sqlsrv' => [

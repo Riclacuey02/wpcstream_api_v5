@@ -31,7 +31,7 @@ $(document).ready(function () {
         referer: referer.protocol + '//' + referer.hostname
       };
       $.ajax({
-        url: "https://ara-sss.net/api/" + 'domain/iframe-stream-list',
+        url: "https://ara-sss.net/" + 'domain/iframe-stream-list',
         type: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -204,7 +204,7 @@ $(document).ready(function () {
         hls_url: stream[0].generated
       };
       $.ajax({
-        url: "https://ara-sss.net/api/" + 'stream-log/create',
+        url: "https://ara-sss.net/" + 'stream-log/create',
         type: 'POST',
         headers: {
           'Content-Type': 'application/json'

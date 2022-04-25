@@ -11,7 +11,7 @@ use DateTimeInterface;
 class StreamLog extends Model
 {
     use HasFactory, SoftDeletes;
-
+    
     protected $connection = 'mongodb';
     protected $collection = 'stream_logs';
 
