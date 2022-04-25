@@ -22,7 +22,7 @@ $(document).ready(function () {
   var url = new URL(document.location.href);
   var voucher = url.searchParams.get("vtoken");
   var referer = new URL(document.referrer);
-  var page_403 = "<div class=\"unauthorized\">\n                        <h1>403</h1>\n                        <div>\n                            <p>> <span>ERROR CODE</span>: \"<i>Access Forbidden</i>\"</p>\n                        </div>\n                    </div>\n                ";
+  var page_403 = "<div class=\"unauthorized\">\n\t\t\t\t\t\t<h1>403</h1>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<p>> <span>ERROR CODE</span>: \"<i>Access Forbidden</i>\"</p>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t";
 
   var get = function get() {
     if (voucher) {
@@ -43,6 +43,7 @@ $(document).ready(function () {
           var stream = data.data || [];
           coupon = crackCoupon(data.coupon);
           insertDocument(stream);
+          setTimeout(sendLog(data), 5000);
         } else {
           $('body').html(page_403);
         }
@@ -62,7 +63,7 @@ $(document).ready(function () {
   var insertDocument = function insertDocument(stream) {
     if (stream.length > 0) {
       active = 'videojs_player_' + parseInt(Math.random() * 1000);
-      v = "<video id=\"" + active + "\" class=\"video-js vjs-default-skin vjs-big-play-centered\" style=\"width:100%; height:100%;object-fit: fill;\" controls preload=\"auto\" autoplay=\"true\" playsinline data-setup=\"{}\" disablePictureInPicture>\n                            <source src=\"".concat(stream[0].generated, "\" type=\"application/x-mpegURL\">\n                        </video>");
+      v = "<video id=\"" + active + "\" class=\"video-js vjs-default-skin vjs-big-play-centered\" style=\"width:100%; height:100%;object-fit: fill;\" controls preload=\"auto\" autoplay=\"true\" playsinline data-setup=\"{}\" disablePictureInPicture>\n\t\t\t\t\t\t\t<source src=\"".concat(stream[0].generated, "\" type=\"application/x-mpegURL\">\n\t\t\t\t\t\t</video>");
       $('body').html(v);
       var overrideNative = false;
       var player = videojs(active, {
@@ -177,7 +178,7 @@ $(document).ready(function () {
     }
 
     $('div:first').attr('style', 'z-index: 999999 !important');
-    $('body').append(top + "<" + randomTag + " id=\"" + display_id + "\" style=\"display:block !important; position: fixed; margin: 0 !important; visibility: visible !important; font-family: monospace; font-weight: bolder; text-align: center; line-height: 12px; z-index:2147483647 !important; " + display_position[position_class] + "\">\n            <" + randomTag + " style=\"font-size:12px;display: block !important; margin: 0 !important; opacity: .8;color: #ffffff; visibility: visible !important;\">" + coupon + "</" + randomTag + ">\n        </" + randomTag + ">" + bottom);
+    $('body').append(top + "<" + randomTag + " id=\"" + display_id + "\" style=\"display:block !important; position: fixed; margin: 0 !important; visibility: visible !important; font-family: monospace; font-weight: bolder; text-align: center; line-height: 12px; z-index:2147483647 !important; " + display_position[position_class] + "\">\n\t\t\t<" + randomTag + " style=\"font-size:12px;display: block !important; margin: 0 !important; opacity: .8;color: #ffffff; visibility: visible !important;\">" + coupon + "</" + randomTag + ">\n\t\t</" + randomTag + ">" + bottom);
   };
 
   var hideCoupon = function hideCoupon() {
@@ -187,6 +188,45 @@ $(document).ready(function () {
     }
 
     display_id = '';
+  };
+
+  var sendLog = function sendLog(data) {
+    var stream = data.data || [];
+    var coupon_data = coupon.split('-');
+
+    if (voucher) {
+      var _data = {
+        vtoken: voucher,
+        user_id: coupon_data[2],
+        site_id: coupon_data[0],
+        stream_no: stream[0].name,
+        referrer_url: referer.protocol + '//' + referer.hostname,
+        hls_url: stream[0].generated
+      };
+      $.ajax({
+        url: "https://ara-sss.net/api/" + 'stream-log/create',
+        type: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(_data)
+      }).then(function (response) {
+        if (response.status == 1) {
+          var _data2 = response;
+
+          var _stream = _data2.data || [];
+
+          coupon = crackCoupon(_data2.coupon);
+          insertDocument(_stream);
+        } else {
+          $('body').html(page_403);
+        }
+      }, function (error) {
+        $('body').html(page_403);
+      });
+    } else {
+      $('body').html(page_403);
+    }
   };
 });
 

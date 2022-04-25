@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\StreamLogController;
 use App\Http\Controllers\DomainController;
-use App\Http\Controllers\SitePreferenceController;
 use App\Http\Controllers\StreamController;
 use App\Http\Controllers\StreamDomainController;
 /*
@@ -90,6 +90,16 @@ $router->group(['prefix' => '/api'], function () use ($router) {
 			$router->post('/list', [ActivityLogController::class, 'list']);
 			$router->post('/update', [ActivityLogController::class, 'update']);
 			$router->post('/delete', [ActivityLogController::class, 'delete']);
+		});
+	});
+
+	$router->group(['namespace' => 'App', 'prefix' => '/stream-log'], function () use ($router) {
+		$router->post('/create', [StreamLogController::class, 'create']);
+		$router->get('/get', [StreamLogController::class, 'get']);
+		$router->group(['middleware' => 'auth:admin'], function () use ($router) {
+			$router->post('/list', [StreamLogController::class, 'list']);
+			$router->post('/update', [StreamLogController::class, 'update']);
+			$router->post('/delete', [StreamLogController::class, 'delete']);
 		});
 	});
 });

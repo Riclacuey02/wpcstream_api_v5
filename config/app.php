@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Manila',
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +183,7 @@ return [
         // MongoDB
         Jenssegers\Mongodb\MongodbQueueServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
     ],
 
     /*
@@ -197,6 +198,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
