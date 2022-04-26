@@ -10,14 +10,7 @@ use Jenssegers\Agent\Agent;
 class StreamLogController extends Controller
 {
 	public function get(Request $request) {
-		$agent = new Agent();
-		$device = $agent->device();
-		$platform = $agent->platform();
-		$platform_version = $agent->version($platform);
-		$browser = $agent->browser();
-		$browser_version = $agent->version($browser);
-		$robot = $agent->robot();
-		print_r($device . '<br>' . $platform.'-'.$platform_version . '<br>' . $browser.'-'.$browser_version . '<br>' . $robot);
+		phpinfo();
 	}	
 
 	public function list(Request $request)
