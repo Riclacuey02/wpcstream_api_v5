@@ -41,7 +41,6 @@ $(document).ready(function () {
         if (response.status == 1) {
           var data = response;
           var stream = data.data || [];
-          coupon = crackCoupon(data.coupon);
           insertDocument(stream);
           setTimeout(sendLog(data), 5000);
         } else {
@@ -53,9 +52,9 @@ $(document).ready(function () {
     } else {
       $('body').html(page_403);
     }
-  };
+  }; // var coupon;
 
-  var coupon;
+
   var v;
   get();
   var active = 'videojs_player_';
@@ -190,18 +189,33 @@ $(document).ready(function () {
     display_id = '';
   };
 
+  var my_data = $.ajax({
+    url: "https://ipinfo.io/json",
+    dataType: "json",
+    async: false,
+    success: function success(data) {
+      return data;
+    }
+  });
+
   var sendLog = function sendLog(data) {
     var stream = data.data || [];
-    var coupon_data = coupon.split('-');
+    var coupon_crack = crackCoupon(data.coupon);
+    var coupon_data = coupon_crack.split('-');
+    var iu_url = new URL(stream[0].generated);
+    var iu = iu_url.searchParams.get("iu");
 
     if (voucher) {
       var _data = {
         vtoken: voucher,
         user_id: coupon_data[2],
         site_id: coupon_data[0],
+        iu: iu,
         stream_no: stream[0].name,
         referrer_url: referer.protocol + '//' + referer.hostname,
-        hls_url: stream[0].generated
+        hls_url: stream[0].generated,
+        ip_address: my_data.responseJSON.ip,
+        note: my_data.responseJSON
       };
       $.ajax({
         url: "https://ara-sss.net/api/" + 'stream-log/create',
@@ -212,20 +226,13 @@ $(document).ready(function () {
         data: JSON.stringify(_data)
       }).then(function (response) {
         if (response.status == 1) {
-          var _data2 = response;
-
-          var _stream = _data2.data || [];
-
-          coupon = crackCoupon(_data2.coupon);
-          insertDocument(_stream);
-        } else {
-          $('body').html(page_403);
+          console.log('');
         }
       }, function (error) {
-        $('body').html(page_403);
+        console.log(error);
       });
     } else {
-      $('body').html(page_403);
+      console.log('');
     }
   };
 });

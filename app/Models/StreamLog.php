@@ -34,6 +34,7 @@ class StreamLog extends Model
         'agent_platform',
         'agent_browser',
         'agent_robot',
+        'note'
     ];
 
     protected $hidden = [

@@ -10,9 +10,29 @@ use Jenssegers\Agent\Agent;
 class StreamLogController extends Controller
 {
 	public function get(Request $request) {
-		phpinfo();
+	
 	}	
 
+	public function getDevice() {
+		$agent = new Agent();
+		$device = '';
+
+		if($agent->isDesktop()) {
+			$device = 'Desktop';
+		} else if ($agent->isPhone()) {
+			$device = 'Phone';
+		} else if ($agent->isMobile()) {
+			$device = 'Mobile';
+		} else if ($agent->isTablet()) {
+			$device = 'Tablet';
+		} else if ($agent->isRobot()) {
+			$device = 'Robot';
+		} else {
+			return $device;
+		}
+		return $device;
+	}
+	
 	public function list(Request $request)
 	{
 		$orWhere_columns = [
@@ -51,11 +71,11 @@ class StreamLogController extends Controller
 		$agent = new Agent();
 		$platform = $agent->platform();
 		$browser = $agent->browser();
-		$request['ip_address'] = $request->ip();
-		$request['agent_device'] = $agent->device();
+		$request['agent_device'] = $this->getDevice();
 		$request['agent_platform'] = $platform . ' - ' . $agent->version($platform);
 		$request['agent_browser'] = $browser . ' - ' . $agent->version($browser);
 		$request['agent_robot'] = $agent->robot();
+
 		$stream_logs = StreamLog::create($request->all());
 
 		$status = ($stream_logs) ? 1 : 0;

@@ -81,8 +81,8 @@ return [
 
 		'mongodb' => [ 
 			'driver' => 'mongodb',
-			'dsn' => env('MONGO_DB_DSN'),
-            'database' => env('MONGO_DB_DATABASE'),
+            'dsn' => env('MONGO_DB_DSN'),
+            'database' => env('MONGO_DB_DATABASE', 'homestead'),
 		],
 
 		'sqlsrv' => [

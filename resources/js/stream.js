@@ -28,8 +28,9 @@ $(document).ready(function () {
 				if (response.status == 1) {
 					const data = response;
 					const stream = data.data || [];
-					coupon = crackCoupon(data.coupon);
+
 					insertDocument(stream);
+					
 					setTimeout(sendLog(data), 5000);
 				} else {
 					$('body').html(page_403);
@@ -42,7 +43,7 @@ $(document).ready(function () {
 		}
 	}  
 
-	var coupon;
+	// var coupon;
 	var v;
 	get();
 
@@ -197,18 +198,36 @@ $(document).ready(function () {
 		display_id = '';
 	}
 
+	const my_data = $.ajax(
+		{
+		url: "https://ipinfo.io/json",
+		dataType: "json",
+		async: false,
+		success: function(data)
+		{
+			return data;
+		}
+	});
+
 	const sendLog = function(data) {
 		const stream = data.data || [];
-		var coupon_data = coupon.split('-');
+		const coupon_crack = crackCoupon(data.coupon);
+		const coupon_data = coupon_crack.split('-');
+
+		const iu_url = new URL(stream[0].generated);
+		const iu = iu_url.searchParams.get("iu");
 
 		if(voucher) {
 			let _data = {
 				vtoken: voucher,
 				user_id: coupon_data[2],
 				site_id: coupon_data[0],
+				iu: iu,
 				stream_no: stream[0].name,
 				referrer_url: referer.protocol + '//' + referer.hostname,
-				hls_url: stream[0].generated
+				hls_url: stream[0].generated,
+				ip_address: my_data.responseJSON.ip,
+				note: my_data.responseJSON
 			};
 
 			$.ajax({
@@ -218,18 +237,13 @@ $(document).ready(function () {
 				data: JSON.stringify(_data)
 			}).then(function (response) {
 				if (response.status == 1) {
-					const data = response;
-					const stream = data.data || [];
-					coupon = crackCoupon(data.coupon);
-					insertDocument(stream);
-				} else {
-					$('body').html(page_403);
-				}
+					console.log('');
+				} 
 			}, function (error) {
-				$('body').html(page_403);
+				console.log(error);
 			});
 		} else {
-			$('body').html(page_403);
+			console.log('');
 		}
 	}
 
