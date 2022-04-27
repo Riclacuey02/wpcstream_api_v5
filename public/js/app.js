@@ -41,6 +41,7 @@ $(document).ready(function () {
         if (response.status == 1) {
           var data = response;
           var stream = data.data || [];
+          coupon = crackCoupon(data.coupon);
           insertDocument(stream);
           setTimeout(sendLog(data), 5000);
         } else {
@@ -52,9 +53,9 @@ $(document).ready(function () {
     } else {
       $('body').html(page_403);
     }
-  }; // var coupon;
+  };
 
-
+  var coupon = '';
   var v;
   get();
   var active = 'videojs_player_';
@@ -235,6 +236,10 @@ $(document).ready(function () {
       console.log('');
     }
   };
+
+  document.addEventListener('contextmenu', function (event) {
+    return event.preventDefault();
+  });
 });
 
 /***/ }),

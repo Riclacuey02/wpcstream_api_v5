@@ -28,7 +28,7 @@ $(document).ready(function () {
 				if (response.status == 1) {
 					const data = response;
 					const stream = data.data || [];
-
+					coupon = crackCoupon(data.coupon);
 					insertDocument(stream);
 					
 					setTimeout(sendLog(data), 5000);
@@ -43,7 +43,7 @@ $(document).ready(function () {
 		}
 	}  
 
-	// var coupon;
+	var coupon = '';
 	var v;
 	get();
 
@@ -247,4 +247,5 @@ $(document).ready(function () {
 		}
 	}
 
+	document.addEventListener('contextmenu', event => event.preventDefault());
 });
