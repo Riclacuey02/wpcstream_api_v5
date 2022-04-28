@@ -25,6 +25,7 @@ class StreamLog extends Model
         'html_domain_id',
         'html_exp_date',
         'stream_no',
+        'parent_referrer_url',
         'referrer_url',
         'browser_url',
         'hls_url',
