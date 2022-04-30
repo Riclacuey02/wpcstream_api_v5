@@ -86,9 +86,8 @@ class DomainController extends Controller
 														->where('stream.deleted_at', '=', NULL);
 													})
 													->inRandomOrder()->first();
-			print_r($domain);
+			print_r(count($iframeStreamLists));
 			echo '<br>';
-			print_r($vtokenData);
 			echo '<br>';
 			print_r($iframeStreamLists);
 			die;
