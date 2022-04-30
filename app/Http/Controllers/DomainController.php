@@ -88,7 +88,8 @@ class DomainController extends Controller
 													->inRandomOrder()->first();
 			
 			for($i=0; count($iframeStreamLists) > $i; $i++){
-				
+				print_r($iframeStreamLists[$i]);
+				die;
 				$length = strlen($iframeStreamLists[$i]->rtmp);
 				$epoch = strtotime($iframeStreamLists[$i]->time, time());
 				$raw_hash = $iframeStreamLists[$i]->hash . $iframeStreamLists[$i]->rtmp . '?p=' . $length . '&e=' . $epoch . '&iu=' . $domain['0']->id.'10001'.$vtokenData->getData()->data->user_id;
