@@ -86,10 +86,13 @@ class DomainController extends Controller
 														->where('stream.deleted_at', '=', NULL);
 													})
 													->inRandomOrder()->first();
-			
+			print_r($domain);
+			echo '<br>';
+			print_r($vtokenData);
+			echo '<br>';
+			print_r($iframeStreamLists);
+			die;
 			for($i=0; count($iframeStreamLists) > $i; $i++){
-				print_r($iframeStreamLists[$i]);
-				die;
 				$length = strlen($iframeStreamLists[$i]->rtmp);
 				$epoch = strtotime($iframeStreamLists[$i]->time, time());
 				$raw_hash = $iframeStreamLists[$i]->hash . $iframeStreamLists[$i]->rtmp . '?p=' . $length . '&e=' . $epoch . '&iu=' . $domain['0']->id.'10001'.$vtokenData->getData()->data->user_id;
