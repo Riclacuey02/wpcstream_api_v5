@@ -86,11 +86,7 @@ class DomainController extends Controller
 														->where('stream.deleted_at', '=', NULL);
 													})
 													->inRandomOrder()->first();
-			print_r(count($iframeStreamLists));
-			echo '<br>';
-			echo '<br>';
-			print_r($iframeStreamLists);
-			die;
+			
 			for($i=0; count($iframeStreamLists) > $i; $i++){
 				$length = strlen($iframeStreamLists[$i]->rtmp);
 				$epoch = strtotime($iframeStreamLists[$i]->time, time());
