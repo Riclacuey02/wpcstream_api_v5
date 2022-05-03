@@ -68,6 +68,7 @@ class StreamLogController extends Controller
 
 	public function create(Request $request)
 	{
+		$date = Carbon::now();
 		$agent = new Agent();
 		$platform = $agent->platform();
 		$browser = $agent->browser();
@@ -75,6 +76,9 @@ class StreamLogController extends Controller
 		$request['agent_platform'] = $platform . ' - ' . $agent->version($platform);
 		$request['agent_browser'] = $browser . ' - ' . $agent->version($browser);
 		$request['agent_robot'] = $agent->robot();
+		$request['created_at_bigint'] = Carbon::parse($date)->format('YmdHis');
+		$request['created_at_date_bigint'] = Carbon::parse($date)->format('Ymd');
+		$request['note'] = json_encode($request['note']);
 
 		$stream_logs = StreamLog::create($request->all());
 

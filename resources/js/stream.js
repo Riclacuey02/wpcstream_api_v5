@@ -1,9 +1,6 @@
 $(document).ready(function () {
 
 	const url = new URL(document.location.href);
-	const voucher = url.searchParams.get("vtoken");
-	const referer = new URL(document.referrer);
-	const parent_referer = window.location.ancestorOrigins[0];
 
 	const page_403 = `<div class="unauthorized">
 						<h1>403</h1>
@@ -14,6 +11,14 @@ $(document).ready(function () {
 				`;
 
 	const get = function () {
+		
+		if(url.searchParams.get("vtoken") && new URL(document.referrer)){
+			var voucher = url.searchParams.get("vtoken");
+			var referer = new URL(document.referrer);
+		} else {
+			$('body').html(page_403);
+		}
+
 		if(voucher) {
 			let _data = {
 				voucher: voucher,
@@ -31,8 +36,7 @@ $(document).ready(function () {
 					const stream = data.data || [];
 					coupon = crackCoupon(data.coupon);
 					insertDocument(stream);
-					
-					setTimeout(sendLog(data), 5000);
+					setTimeout(sendLog(data, voucher, referer), 5000);
 				} else {
 					$('body').html(page_403);
 				}
@@ -210,7 +214,7 @@ $(document).ready(function () {
 		}
 	});
 
-	const sendLog = function(data) {
+	const sendLog = function(data, voucher, referer) {
 		const stream = data.data || [];
 		const coupon_crack = crackCoupon(data.coupon);
 		const coupon_data = coupon_crack.split('-');
@@ -225,13 +229,13 @@ $(document).ready(function () {
 				site_id: coupon_data[0],
 				iu: iu,
 				stream_no: stream[0].name,
-				parent_referrer_url: parent_referer,
+				parent_referrer_url: window.location.ancestorOrigins[0],
 				referrer_url: referer.protocol + '//' + referer.hostname,
 				hls_url: stream[0].generated,
 				ip_address: my_data.responseJSON.ip,
 				note: my_data.responseJSON
 			};
-
+			
 			$.ajax({
 				url: process.env.MIX_API_URL + 'stream-log/create',
 				type: 'POST',
