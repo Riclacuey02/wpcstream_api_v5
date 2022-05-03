@@ -36,34 +36,50 @@ class StreamLogController extends Controller
 	public function list(Request $request)
 	{
 		$orWhere_columns = [
-			'vtoken',
+            'vtoken',
+			'user_id',
+			'site_id',
+			'iu',
+			'stream_no',
+			'parent_referrer_url',
+			'referrer_url',
 			'browser_url',
-			'referrer_url'
-		];
+			'hls_url',
+			'ip_address',
+			'agent_device',
+			'agent_platform',
+			'agent_browser',
+			'agent_robot',
+			'note'
+        ];
 
-		$limit = ($request->limit) ? $request->limit : 2;
-		$projections = [];
-		$sort_column = ($request->sort_column) ? $request->sort_column : 'created_at';
-		$sort_order = ($request->sort_order) ? $request->sort_order : 'desc';
-		
-		$stream_logs = new StreamLog;
+        $key = ($request->search_key) ? $request->search_key : '';
 
-		if($request->search_key) {
-			foreach ($orWhere_columns as $column) {
-				$stream_logs = $stream_logs->orWhere($column, 'like', "%$request->search_key%");
-			}
-		}
+        if($request->search_key){
+            $key = $request->search_key;
+        }
 
-		if ($request->from && $request->to) {
-			$stream_logs = $stream_logs->whereBetween('created_at', [Carbon::parse($request->from)->format('Y-m-d H:i:s'), Carbon::parse($request->to)->format('Y-m-d H:i:s')]);
-		}
-		
-		$stream_logs = $stream_logs->orderBy($sort_column, $sort_order)->take(10)->paginate($limit, $projections);
+        $limit = ($request->limit) ? $request->limit : 50;
+        $sort_column = ($request->sort_column) ? $request->sort_column : 'id';
+        $sort_order = ($request->sort_order) ? $request->sort_order : 'desc';
 
-		return response()->json([
-			'data' => $stream_logs,
+		$streamLog = StreamLog::where(function ($q) use ($orWhere_columns, $key) {
+                            foreach ($orWhere_columns as $column) {
+                                $q->orWhere($column, 'ILIKE', "%{$key}%");
+                            }
+                        });
+
+        if($request->from && $request->to){
+            $streamLog = $streamLog->whereBetween('created_at', [Carbon::parse($request->from)->format('Y-m-d H:i:s'), Carbon::parse($request->to)->format('Y-m-d H:i:s')]);
+        }
+
+        $streamLog = $streamLog->orderBy($sort_column, $sort_order)->paginate($limit);
+
+        return response()->json([
+			'data' => $streamLog,
 			'status' => 1
 		]);
+
 	}
 
 	public function create(Request $request)
