@@ -79,6 +79,19 @@ return [
 			'sslmode' => env('DB_SSL_MODE', 'prefer'),
 		],
 
+		'pgsql1' => [
+			'driver' => 'pgsql',
+			'host' => env('DB1_HOST', '127.0.0.1'),
+			'port' => env('DB1_PORT', 5432),
+			'database' => env('DB1_DATABASE', 'forge'),
+			'username' => env('DB1_USERNAME', 'forge'),
+			'password' => env('DB1_PASSWORD', ''),
+			'charset' => env('DB1_CHARSET', 'utf8'),
+			'prefix' => env('DB1_PREFIX', ''),
+			'schema' => env('DB1_SCHEMA', 'public'),
+			'sslmode' => env('DB1_SSL_MODE', 'prefer'),
+		],
+
 		'mongodb' => [ 
 			'driver' => 'mongodb',
             'dsn' => env('MONGO_DB_DSN'),

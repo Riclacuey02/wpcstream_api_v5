@@ -3,17 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use DateTimeInterface;
 
 class StreamLog extends Model
 {
     use HasFactory, SoftDeletes;
     
-    protected $connection = 'mongodb';
-    protected $collection = 'stream_logs';
+    // protected $connection = 'mongodb';
+    protected $connection = 'pgsql1';
+    protected $table = 'stream_logs';
 
     protected $fillable = [
         'vtoken',
@@ -35,7 +36,9 @@ class StreamLog extends Model
         'agent_platform',
         'agent_browser',
         'agent_robot',
-        'note'
+        'note',
+        'created_at_bigint',
+        'created_at_date_bigint'
     ];
 
     protected $hidden = [
